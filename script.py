@@ -1,33 +1,10 @@
 import json
 import traceback
-from typing import Dict, List, Optional, Union
+from typing import List, Optional, Union
 import boto3
 
-
-def get_credentials_input():
-    profile_name = None
-    aws_access_key_id = None
-    aws_secret_access_key = None
-    aws_is_configured = input_y_n(
-        "Is your aws-cli setup with 'aws configure'? ")
-
-    if aws_is_configured:
-        profile_name_input = input("Enter Profile name: [default]")
-        if profile_name_input:
-            profile_name = profile_name_input
-    else:
-        aws_access_key_id = input("Enter AWS Access Key ID: ")
-        aws_secret_access_key = input("Enter AWS Secret Access Key: ")
-
-    return profile_name, aws_access_key_id, aws_secret_access_key
-
-
-def verify_sg_input(session: boto3.Session, security_group_ids: List[str]) -> bool:
-    # boto3 sends api call to check if sg exists, if does not exist then raises botocore.exceptions.ClientError
-    session.client('ec2').describe_security_groups(
-        GroupIds=security_group_ids)
-
-    return security_group_ids
+from input_parsers import get_credentials_input, input_y_n, verify_sg_input
+from helpers import filter_response
 
 
 def start_session(aws_access_key_id: Optional[str] = None,
@@ -66,10 +43,6 @@ def get_and_verify_sg_input(session: boto3.Session) -> Union[str, List[str], Non
     return security_group_ids
 
 
-def filter_response(data: Dict[str, any], wanted_fields: List[str]) -> dict:
-    return {key: value for key, value in data.items() if key in wanted_fields}
-
-
 def generate_eni_link(eni_id: str, region: str) -> str:
     return f"https://{region}.console.aws.amazon.com/ec2/home?region={region}#NetworkInterface:networkInterfaceId={eni_id}"
 
@@ -92,18 +65,6 @@ def describe_network_interface(session: boto3.Session, security_group_id: List[s
 
     print(json.dumps(
         [dict(**filter_response(eni, response_fields), View=generate_eni_link(eni["NetworkInterfaceId"], boto3_session.region_name)) for eni in response["NetworkInterfaces"]], indent=4, default=str))
-
-
-def input_y_n(message, default="Y") -> bool:
-    y_n = input(f"{message} Y/N: [{default}]").lower()
-    while y_n != 'y' and y_n != 'n' and y_n != "":
-        print("Invalid input, please select Y or N")
-        y_n = input("Search for another? Y/N: [Y] ").lower()
-
-    if y_n == "y" or y_n == "":
-        return True
-
-    return False
 
 
 def find_enis(boto3_session: boto3.Session):
