@@ -1,5 +1,5 @@
-build
-dist
-*.csv
-*.spec
-.DS_Store
+# build
+# dist
+# *.csv
+# *.spec
+# .DS_Store
