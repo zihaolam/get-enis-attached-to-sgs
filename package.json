@@ -2,7 +2,7 @@
   "name": "apu-sg-attached-interfaces",
   "version": "1.0.0",
   "scripts": {
-    "build": "pipenv run pyinstaller script.py --target-arch x86_64"
+    "build": "pipenv run pyinstaller script.py"
   },
   "repository": "git@github.com:zihaolam/get-enis-attached-to-sgs.git",
   "author": "Lam Zi Hao <lamzi@amazon.com>",
