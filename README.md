@@ -9,3 +9,5 @@ boto3 version: 1.26.13
 pip install -r requirements.txt
 python script.py
 ```
+
+Results will be output in .csv file
