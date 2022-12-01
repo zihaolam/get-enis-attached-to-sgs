@@ -77,7 +77,7 @@ def subnet_url(subnet_id):
     return f"https://{region}.console.aws.amazon.com/vpc/home?region={region}#subnets:SubnetId={subnet_id}"
 
 
-new_file = Path(f"./{datetime.today().strftime('%Y-%m-%d')}.csv")
+new_file = Path(f"./results.csv")
 new_file.touch(exist_ok=True)
 output_file = open(new_file, 'w')
 writer = csv.writer(output_file)

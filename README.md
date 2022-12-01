@@ -10,4 +10,4 @@ pip install -r requirements.txt
 python script.py
 ```
 
-Results will be output in .csv file
+Results will be output in results.csv
